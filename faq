@@ -1,0 +1,8 @@
+Error: gatsby develop gives following error:
+  Error: ENOSPC: System limit for number of file watchers reached, watch '/home/tgk/code/sites/yogapr
+ide-gatsby/yogapride/node_modules/gatsby-source-filesystem/create-file-node-from-buffer.js'
+  
+solution: run following and then try gatsby develop 
+echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
+========================
