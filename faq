@@ -6,3 +6,40 @@ solution: run following and then try gatsby develop
 echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
 ========================
+Git comands
+#- first time add all files
+git add . 
+
+#commot all files
+git commit -m 'First commit'
+
+#add remote gitgub url . create new repository if needed
+# git remote set-url origin https://github.com/instantwpuserwin/gatsby-yogapride.git
+
+git remote add github git@github.com:instantwpuserwin/gatsby-yogapride.git
+
+
+git remote add origin  https://github.com/instantwpuserwin/gatsby-yogapride
+
+#Verify remote git URL to make sure
+git remote -v
+
+#push to github
+git push -u origin master
+
+#deploy to netlify
+https://app.netlify.com/start/repos/instantwpuserwin%2Fgatsby-yogapride
+
+Published to https://zen-goldwasser-8cce80.netlify.app/
+
+
+==============
+#edit metlify settings
+https://app.netlify.com/sites/zen-goldwasser-8cce80/settings/deploys#continuous-deployment
+=================
+Create web hook in netlify 
+https://api.netlify.com/build_hooks/601780f3970bcf56204a26d6
+and add to WPGatsby settings
+
+#future commits
+git commit -am 'abou us page'
