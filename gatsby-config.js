@@ -23,12 +23,21 @@ module.exports = {
        * https://github.com/gatsbyjs/gatsby-source-wordpress-experimental/blob/master/README.md
        *
        */
-      resolve: `gatsby-source-wordpress-experimental`,
+      resolve: `gatsby-source-wordpress`,
       options: {
         // the only required plugin option for WordPress is the GraphQL url.
         url:
           process.env.WPGRAPHQL_URL ||
-          `https://www.yogapride.com/graphql/`,
+          `https://wh615253.ispot.cc/yogapride_clone/graphql/`,
+          includedRoutes: [
+            //"**/categories",
+            "**/posts",
+            "**/pages",
+            // "**/media",
+            // "**/tags",
+            // "**/taxonomies",
+            // "**/users",
+          ],
       },
     },
 
@@ -51,6 +60,7 @@ module.exports = {
      * See https://www.gatsbyjs.com/docs/gatsby-image/#setting-up-gatsby-image
      * if you're curious about it.
      */
+    `gatsby-plugin-image`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
 

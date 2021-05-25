@@ -43,3 +43,19 @@ and add to WPGatsby settings
 
 #future commits
 git commit -am 'abou us page'
+========================
+
+wp find posts by category name
+{
+  allWpPost(filter: {
+categories: {nodes: {elemMatch:{name:  { eq: "Bandha" } }}}  
+  
+  }) {
+    edges {
+node {
+title
+}
+    }
+  }
+ 
+}

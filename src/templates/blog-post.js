@@ -1,21 +1,28 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
-import Image from "gatsby-image"
+//import Image from "gatsby-image"
+import { GatsbyImage , getImage} from "gatsby-plugin-image"
 import parse from "html-react-parser"
 
 // We're using Gutenberg so we need the block styles
 import "@wordpress/block-library/build-style/style.css"
 import "@wordpress/block-library/build-style/theme.css"
 
-import Bio from "../components/bio"
+//import Bio from "../components/bio"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
 const BlogPostTemplate = ({ data: { previous, next, post } }) => {
-  const featuredImage = {
-    fluid: post.featuredImage?.node?.localFile?.childImageSharp?.fluid,
-    alt: post.featuredImage?.node?.alt || ``,
-  }
+  // const featuredImage = {
+  //   fluid: post.featuredImage?.node?.localFile?.childImageSharp?.fluid,
+  //   alt: post.featuredImage?.node?.alt || ``,
+  // }
+
+  const image = getImage(post.featuredImage)
+  // const featuredImage = {
+  //   fluid: post.featuredImage?.node?.localFile?.childImageSharp?.constrained,
+  //   alt: post.featuredImage?.node?.altText || ``,
+  // }
 
   return (
     <Layout>
@@ -28,17 +35,18 @@ const BlogPostTemplate = ({ data: { previous, next, post } }) => {
       >
         <header>
           <h1 itemProp="headline">{parse(post.title)}</h1>
-
-          <p>{post.date}</p>
-
+          <p>{post.date}</p> <p>fdffdfd</p>
           {/* if we have a featured image for this post let's display it */}
-          {featuredImage?.fluid && (
+          {/*  {featuredImage?.fluid && (
             <Image
               fluid={featuredImage.fluid}
               alt={featuredImage.alt}
               style={{ marginBottom: 50 }}
             />
-          )}
+         )} */}
+
+
+         <GatsbyImage image={image} alt={post.altText} />
         </header>
 
         {!!post.content && (
@@ -47,9 +55,7 @@ const BlogPostTemplate = ({ data: { previous, next, post } }) => {
 
         <hr />
 
-        <footer>
-          <Bio />
-        </footer>
+        <footer></footer>
       </article>
 
       <nav className="blog-post-nav">
@@ -105,9 +111,12 @@ export const pageQuery = graphql`
           altText
           localFile {
             childImageSharp {
-              fluid(maxWidth: 1000, quality: 100) {
-                ...GatsbyImageSharpFluid_tracedSVG
-              }
+              gatsbyImageData(
+                width: 200
+                placeholder: BLURRED
+                formats: [AUTO, WEBP, AVIF]
+              )
+               
             }
           }
         }

@@ -25,6 +25,18 @@ exports.createPages = async gatsbyUtilities => {
 
   // And a paginated archive
   await createBlogPostArchive({ posts, gatsbyUtilities })
+
+  // //Display Pages
+  //   // Query our posts from the GraphQL server
+  //   const pages = await getPages(gatsbyUtilities)
+
+  //   console.log(pages);
+  //   // // If there are no posts in WordPress, don't do anything
+  //   if (!pages.length) {
+  //     return
+  //   }
+  
+  // await createIndividualBlogPages({ pages, gatsbyUtilities })
 }
 
 /**
@@ -164,3 +176,68 @@ async function getPosts({ graphql, reporter }) {
 
   return graphqlResult.data.allWpPost.edges
 }
+
+async function getPages({ graphql, reporter }) {
+  const graphqlResult = await graphql(/* GraphQL */ `
+    query WpPages {
+      # Query all WordPress blog Pages sorted by date
+      allWpPage(sort: { fields: [date], order: DESC }) {
+        edges {
+          previous {
+            id
+          }
+
+          # note: this is a GraphQL alias. It renames "node" to "post" for this query
+          # We're doing this because this "node" is a post! It makes our code more readable further down the line.
+          page: node {
+            id
+            uri
+          }
+
+          next {
+            id
+          }
+        }
+      }
+    }
+  `)
+
+  if (graphqlResult.errors) {
+    reporter.panicOnBuild(
+      `There was an error loading your blog Pages`,
+      graphqlResult.errors
+    )
+    return
+  }
+
+  return graphqlResult.data.allWpPage.edges
+}
+
+const createIndividualBlogPages = async ({ pages, gatsbyUtilities }) =>
+  Promise.all(
+    pages.map(({ previous, page, next }) =>
+      // createPage is an action passed to createPages
+      // See https://www.gatsbyjs.com/docs/actions#createPage for more info
+      gatsbyUtilities.actions.createPage({
+        // Use the WordPress uri as the Gatsby page path
+        // This is a good idea so that internal links and menus work 👍
+        path: page.uri,
+
+        // use the blog page template as the page component
+        component: path.resolve(`./src/templates/blog-page.js`),
+
+        // `context` is available in the template as a prop and
+        // as a variable in GraphQL.
+        context: {
+          // we need to add the page id here
+          // so our blog page template knows which blog page
+          // the current page is (when you open it in a browser)
+          id: page.id,
+
+          // We also use the next and previous id's to query them and add links!
+          previousPageId: previous ? previous.id : null,
+          nextPageId: next ? next.id : null,
+        },
+      })
+    )
+  )
