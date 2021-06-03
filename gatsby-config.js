@@ -25,6 +25,10 @@ module.exports = {
        */
       resolve: `gatsby-source-wordpress`,
       options: {
+
+        production: {
+          allow404Images: true,
+        },
         // the only required plugin option for WordPress is the GraphQL url.
         url:
           process.env.WPGRAPHQL_URL ||
